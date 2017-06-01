@@ -1,33 +1,33 @@
 package com.epages.yaml;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.stream.Stream;
 
 class CommandLineArguments {
 
-    private final File source;
-    private final File override;
+    private final YamlSource source;
+    private final YamlSource override;
 
-    public CommandLineArguments(File source, File override) {
-        this.source = source;
-        this.override = override;
+    public CommandLineArguments(String source, String override) {
+        this.source = new YamlSource(source);
+        this.override = new YamlSource(override);
     }
 
-    public File getSource() {
+    public YamlSource getSource() throws IOException {
         return source;
     }
 
-    public File getOverride() {
+    public YamlSource getOverride() throws IOException {
         return override;
     }
 
     public void validate() {
         Stream.of(source, override)
-        .filter(file -> !file.exists())
-        .forEach(file -> {
-            throw new UncheckedIOException(new FileNotFoundException(file.getName()));
+        .filter(source -> !source.exists())
+        .forEach(source -> {
+            throw new UncheckedIOException(new FileNotFoundException(source.getFilename()));
         });
     }
 }
