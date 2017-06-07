@@ -3,6 +3,7 @@ package com.epages.yaml;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,6 +17,10 @@ public class YamlMapper {
 
     public JsonNode read(File file) throws IOException {
         return mapper.readTree(file);
+    }
+
+    public JsonNode read(Reader reader) throws IOException {
+        return mapper.readTree(reader);
     }
 
     public JsonNode read(InputStream stream) throws IOException {

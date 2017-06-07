@@ -1,6 +1,7 @@
 package com.epages.yaml;
 
 import java.io.IOException;
+import java.io.Reader;
 
 import org.apache.commons.cli.ParseException;
 
@@ -14,11 +15,15 @@ public class YamlMergeApplication {
             CommandLineArguments arguments = new YamlCommandLineParser().parseCommandLine(args);
             arguments.validate();
             YamlMapper mapper = new YamlMapper();
-            JsonNode merged = new YamlMerger().merge(
-                    mapper.read(arguments.getSource()),
-                    mapper.read(arguments.getOverride())
-            );
-            mapper.write(new YAMLFactory().createGenerator(System.out), merged);
+            try(
+                Reader source = arguments.getSource().asReader();
+                Reader override = arguments.getOverride().asReader()) {
+                JsonNode merged = new YamlMerger().merge(
+                        mapper.read(source),
+                        mapper.read(override)
+                );
+                mapper.write(new YAMLFactory().createGenerator(System.out), merged);
+            }
         } catch (ParseException e) { // printing help is handled inside YamlCommandLineParser
             System.exit(1);
         }

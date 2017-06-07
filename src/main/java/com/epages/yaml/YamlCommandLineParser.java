@@ -1,7 +1,5 @@
 package com.epages.yaml;
 
-import java.io.File;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -21,7 +19,6 @@ public class YamlCommandLineParser {
         Options options = new Options();
 
         Option source = new Option(SOURCE_SHORT, SOURCE_LONG, true, "source yaml file");
-        source.setRequired(true);
         options.addOption(source);
 
         Option override = new Option(OVERRIDE_SHORT, OVERRIDE_LONG, true, "override yaml file");
@@ -35,7 +32,7 @@ public class YamlCommandLineParser {
             String sourceFile   = cmd.getOptionValue(SOURCE_LONG);
             String overrideFile = cmd.getOptionValue(OVERRIDE_LONG);
 
-            return new CommandLineArguments(new File(sourceFile), new File(overrideFile));
+            return new CommandLineArguments(sourceFile, overrideFile);
         } catch (ParseException e) {
             System.out.println(e.getMessage());
             new HelpFormatter().printHelp("yaml-merge", options);
